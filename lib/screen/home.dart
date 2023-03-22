@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:gorouter_training/model/home_model.dart';
 
 class HomePage extends StatelessWidget {
@@ -12,8 +13,8 @@ class HomePage extends StatelessWidget {
     // const String name = "Theara";
 
     final List<HomeModel> list = [
-      HomeModel(id: '1', name: 'aaaa', position: 'AAAAA'),
-      HomeModel(id: '2', name: 'bbbbb', position: 'BBBBB')
+      HomeModel(id: '11', name: 'aaaa', position: 'AAAAA'),
+      HomeModel(id: '22', name: 'bbbbb', position: 'BBBBB')
     ];
     return Scaffold(
       appBar: AppBar(
@@ -22,20 +23,9 @@ class HomePage extends StatelessWidget {
       ),
       body: Center(
         child: ElevatedButton(
-          child: const Text("Go To Detail"),
+          child: const Text("Go To Detail List"),
           onPressed: () {
-            // GoRouter.of(context).go('/detail');
-            // context.go("/home/detail", extra: homeModel); //push object
-            // context.go('/wishlist/wishlist_detail');
-
-            // context.go("/$id"); //push param
-
-            // context.goNamed('detail', params: {
-            //   'id': id.toString(),
-            //   'name': name
-            // }); //push query params
-
-            // context.go('/detail', extra: list); //push list
+            context.go('/detail-homepage', extra: list); //push list
           },
         ),
       ),

@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:gorouter_training/model/home_model.dart';
-import 'package:gorouter_training/screen/detail_page.dart';
+import 'package:gorouter_training/screen/bottom_navigation_bar.dart';
+import 'package:gorouter_training/screen/detail_book.dart';
+import 'package:gorouter_training/screen/detail_fav_screen.dart';
+import 'package:gorouter_training/screen/detail_home_page.dart';
+import 'package:gorouter_training/screen/detail_oorder.dart';
 import 'package:gorouter_training/screen/home.dart';
-import 'package:gorouter_training/screen/profile.dart';
+import 'package:gorouter_training/screen/order_screen.dart';
+import 'package:gorouter_training/screen/book_screen.dart';
 
-import '../screen/bottom_nav_bar.dart';
-import '../screen/detail_wishlist.dart';
-import '../screen/wishlist.dart';
+import '../screen/fav_screen.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<NavigatorState> _shellNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'shell');
-const _scaffoldKey = ValueKey<String>('App scaffold');
 final router = GoRouter(
   navigatorKey: _rootNavigatorKey,
   initialLocation: '/',
@@ -20,12 +22,13 @@ final router = GoRouter(
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       builder: (context, state, child) {
-        return ScaffoldWithNavBar(
+        return BottomNavigationbar(
           child: child,
         );
       },
       routes: [
         // This screen is displayed on the ShellRoute's Navigator.
+        //! Normal Push
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
           path: '/',
@@ -34,48 +37,75 @@ final router = GoRouter(
           },
           routes: <RouteBase>[
             // This screen is displayed on the ShellRoute's Navigator.
+            //! Push with Param
             GoRoute(
-              path: 'detail',
-              // path: 'detail/:id/:name', // path query params
-              // path:':id' // path of 1 param
-              name: "Detail",
+              parentNavigatorKey: _shellNavigatorKey,
+              path: 'detail-homepage',
+              name: "DetailHomePage",
               builder: (BuildContext context, GoRouterState state) {
-                // final id = int.parse(state.params['id'].toString()); //Assign param
-
-                // final id = int.parse(state.params['id'].toString());
-                // final name = state.params['name'].toString();
-                // final homeModel = state.extra as HomeModel; //Assign object
+                //Assign object
                 final list = state.extra as List<HomeModel>; //Assign list
-                return DetailPage(
+                return DetailHomePage(
                   listHome: list,
-                  // id: id, name: name, //throw query param
-                  // homeModel: state.extra! as HomeModel, //throw object or model
                 );
               },
             ),
           ],
         ),
         GoRoute(
-            parentNavigatorKey: _shellNavigatorKey,
-            path: '/wishlist',
-            builder: (BuildContext context, GoRouterState state) {
-              return const WishlistPage();
-            },
-            routes: [
-              GoRoute(
-                path: 'wishlist_detail',
-                name: "WishlistDetail",
-                builder: (BuildContext context, GoRouterState state) {
-                  return const DetailWishlist();
-                },
-              ),
-            ]),
+          parentNavigatorKey: _shellNavigatorKey,
+          path: '/favorite',
+          name: 'Favorite',
+          builder: (BuildContext context, GoRouterState state) {
+            return const FavoriteScreen();
+          },
+          routes: [
+            GoRoute(
+              path: 'detail-fav',
+              name: "DetailFav",
+              builder: (BuildContext context, GoRouterState state) {
+                return const DetailFavoriteScreen();
+              },
+            ),
+          ],
+        ),
         // Displayed ShellRoute's Navigator.
+        //! QueryParam
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
-          path: '/profile',
+          path: '/order',
           builder: (BuildContext context, GoRouterState state) {
-            return const ProfilePage();
+            return const OrderScreen();
+          },
+          routes: [
+            GoRoute(
+              path: 'detail-order',
+              name: "DetailOrder",
+              builder: (BuildContext context, GoRouterState state) {
+                return DetailOrder(
+                  id: int.tryParse(state.queryParams['id'] ?? ''),
+                );
+              },
+            ),
+          ],
+        ),
+      ],
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: '/books',
+      builder: (BuildContext context, GoRouterState state) {
+        return const BookScreen();
+      },
+      routes: [
+        //! Push with Parameter
+        GoRoute(
+          parentNavigatorKey: _rootNavigatorKey,
+          path: ':id',
+          builder: (BuildContext context, GoRouterState state) {
+            return DetailBook(
+              id: int.tryParse(state.params['id'] ?? ''),
+            );
           },
         ),
       ],
