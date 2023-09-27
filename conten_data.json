@@ -1,0 +1,15 @@
+{
+    "name" : "Flutter Internal Workshop by Mr. Diya",
+    "sidebar": [
+        ["GoRouter", 
+            [
+                ["Introduction", "/introduction-to-go-router"],
+                ["Part One - Declarative Routing", "/declarative-routing"],
+                ["Part Two - Sub-Routes and Parameters", "/parameter"],
+                ["Part Three - Sub-Routes and QueryParameters", "/query-parameter"],
+                ["Part Four - Navigation without context and access context","/navigator_without_context"],
+                ["Part Five - Deeplink", "/deeplink"]
+            ]
+        ]
+    ]
+}
