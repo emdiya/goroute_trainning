@@ -1,0 +1,66 @@
+# Declarative Routing
+[go_router](https://pub.dev/packages/go_router) is governed by a set of routes which you specify as part of the GoRouter constructor.
+
+Before starting, let's install `go_router` packages with the command line:
+
+```dart
+flutter pub add go_router
+```
+
+In this part, you will learn how to declare route with GoRouter constructor. 
+Inside your config folder, please create file <em>route.dart</em> as follow code as below:
+
+```dart
+final router = GoRouter(
+  routes: [
+    GoRoute(
+      path: '/',
+      name: 'HomePage',
+      builder: (context, state) => const HomePage(),
+    ),
+    GoRoute(
+      path: '/profile',
+      name: 'Profile',
+      builder: (context, state) => const Profile(),
+    )
+  ],
+);
+```
+
+In this case, we've defined two `routes`. Each route path will be matched against the location to which the user is navigating. Only a single route can be matched, specifically the one whose `path` matches the entire location (and so it doesn't matter in which order you list your routes). The path will be matched in a case-insensitive way, although the case for `parameters` will be preserved.
+
+In addition to the `path`, each route will typically have a `builder` function, which is responsible for building the Widget that is to take up the entire screen of your app. The default transition will be used between pages depending on the type of app you've put at the top of your widget tree, e.g. the use of `MaterialApp` will cause go_router to use the `MaterialPage` transitions.
+
+## Initialization
+
+With a list of routes, you can create an instance of a `GoRouter`, which itself provides the objects you need to call the `MaterialApp.router` constructor (or the `CupertinoApp.router` constructor):
+
+```dart
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+        routeInformationParser: router.routeInformationParser,
+        routerDelegate: router.routerDelegate,
+        routeInformationProvider: router.routeInformationProvider);
+  }
+}
+```
+
+With the `router` in place, your app can now navigate between pages.
+
+To navigate between pages, use the `GoRouter.go` method:
+
+```dart
+// navigate using the GoRouter
+onTap: () => GoRouter.of(context).go('/profile')
+```
+
+`go_router` also provides a simplified means of navigation using Dart extension methods:
+
+```dart
+// navigate using the GoRouter more easily
+onTap: () => context.go('/profile')
+```
